@@ -12,13 +12,14 @@
   var load_ga          = null;
   var get_script       = null;
   var add_class        = null;
+  var remove_class     = null;
+  var has_class        = null;
   var debounce         = null;
   var document_ready   = null;
   var scales           = [1, 1];
   var meta             = qsa in doc ? doc[qsa]('meta[name=viewport]') : [];
   var links            = doc[getByTag]('a');
-  // var font_families    = ['Lato:400:latin-ext', 'Permanent+Marker::latin'];
-  var font_families    = ['Lato:600:latin-ext', 'Permanent+Marker::latin'];
+  var font_families    = ['Lato:700:latin', 'Permanent+Marker::latin'];
   var html             = doc[getByTag]('html')[0];
   var body             = doc[getByTag]('body')[0];
 
@@ -87,6 +88,25 @@
       el.classList.add(className);
     } else {
       el.className += ' ' + className;
+    }
+  };
+
+  remove_class = function (el, className) {
+    if (el.classList) {
+      el.classList.remove(className);
+    } else {
+      el.className = el.className.replace(
+        new RegExp('(?:^|\\s)' + className + '(?!\\S)'),
+        ''
+      );
+    }
+  };
+
+  has_class = function (el, className) {
+    if (el.classList) {
+      return el.classList.contains(className);
+    } else {
+      return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
     }
   };
 
@@ -192,19 +212,34 @@
     fix_members_flex();
 
     var countdown = new Countdown({
-      selector: '.countdown-here',
-      msgBefore: "",
-      msgAfter: "ROD2016 er i gang!",
-      // msgPattern: "Der er {weeks} uger, {days} dage, {hours} timer, {minutes} minutter og {seconds} sekunder til ROD2016 begynder.",
-      // msgPattern: "Der er {weeks} uger, {days} dage, {hours} timer og {minutes} minutter til ROD2016 begynder.",
-      msgPattern: "Der er {weeks} uger, {days} dage, {hours} timer og {minutes} minutter til næste ROD begynder (den 19. marts 2016)",
-      dateEnd: new Date('2016-03-19T14:00:00')
+      selector:     '#countdown-wrap',
+      msgPattern:   doc.getElementById('countdown-wrap').innerHTML,
+      dateEnd:      new Date('2016-03-19T14:00:00'),
+      leadingZeros: true
     });
+
+    var explanationVideo = doc.getElementById('explanation-video');
+    var button           = doc.getElementById('what-is-rod-video');
+
+    button.onclick = function(event) {
+      if (has_class(explanationVideo, 'visible')) {
+        remove_class(explanationVideo, 'visible');
+      } else {
+        add_class(explanationVideo, 'visible');
+      }
+      event.preventDefault();
+    };
   });
 } (document, window));
 
 /* jshint ignore:start */
 
+/*!
+ * Countdown.js by HugoGiraudel
+ * Modified by <brego> for template use
+ * @link: https://github.com/HugoGiraudel/Countdown.js
+ * @license: MIT
+ */
 (function(global) {
   "use strict";
 
@@ -227,39 +262,49 @@
   var Countdown = function (conf) {
     this.conf = global.extend({
       // Dates
-      dateStart    : new Date(),
-      dateEnd      : new Date(new Date().getTime() + (24 * 60 * 60 * 1000)),
+      dateStart:    new Date(),
+      dateEnd:      new Date(),
 
       // Default elements
-      selector     : ".timer",
+      selector:     "",
 
       // Messages
-      msgBefore    : "Be ready!",
-      msgAfter     : "It's over, sorry folks!",
-      msgPattern   : "{days} days, {hours} hours, {minutes} minutes and {seconds} seconds left.",
+      msgBefore:    "",
+      msgAfter:     "",
+      msgPattern:   "",
 
       // Callbacks
-      onStart      : null,
-      onEnd        : null,
+      onStart:      null,
+      onEnd:        null,
 
       // Extra options
-      leadingZeros : false,
-      initialize   : true
+      leadingZeros: false,
+      initialize:   true
     }, conf);
 
     // Private variables
-    this.started = false;
+    this.started  = false;
     this.selector = document.querySelectorAll(this.conf.selector);
     this.interval = 1000;
     this.patterns = [
-      { pattern: "{years}", secs: 31536000 },
-      { pattern: "{months}", secs: 2628000 },
-      { pattern: "{weeks}", secs: 604800 },
-      { pattern: "{days}", secs: 86400 },
-      { pattern: "{hours}", secs: 3600 },
+      { pattern: "{years}",   secs: 31536000 },
+      { pattern: "{months}",  secs: 2628000 },
+      { pattern: "{weeks}",   secs: 604800 },
+      { pattern: "{days}",    secs: 86400 },
+      { pattern: "{hours}",   secs: 3600 },
       { pattern: "{minutes}", secs: 60 },
       { pattern: "{seconds}", secs: 1 }
     ];
+
+    if (this.selector[0].nodeName === 'SCRIPT') {
+      var placeholder = document.createElement("div");
+      var orgId       = this.selector[0].id;
+      var orgClass    = this.selector[0].className;
+      this.selector[0].parentNode.replaceChild(placeholder, this.selector[0]);
+      placeholder.id        = orgId;
+      placeholder.className = orgClass;
+      this.selector         = [placeholder];
+    }
 
     // Doing all the things!
     if (this.initialize !== false) {
@@ -382,11 +427,6 @@
     // onStart callback
     if (typeof this.conf["on" + e] === "function") {
       this.conf["on" + e]();
-    }
-
-    // Triggering a jQuery event if jQuery is loaded
-    if (typeof global.jQuery !== "undefined") {
-      global.jQuery(this.conf.selector).trigger("countdown" + e);
     }
   };
 
