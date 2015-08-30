@@ -140,7 +140,9 @@
       .pipe($.plumber())
       .pipe($.sourcemaps.init())
       .pipe(gulp.dest(paths.scripts.build))
-      .pipe($.uglify())
+      .pipe($.uglify({
+        preserveComments: 'some' // Should be 'license', but that's dead
+      }))
       .pipe($.rename({suffix: '.min'}))
       .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest(paths.scripts.build))
@@ -217,13 +219,15 @@
 
   gulp.task('clean:scripts', function(cb) {
     $.del([
-      paths.scripts.build + '**/*.js'
+      paths.scripts.build + '**/*.js',
+      paths.scripts.build + '**/*.js.map'
     ], cb);
   });
 
   gulp.task('clean:styles', function(cb) {
     $.del([
-      paths.styles.build + '**/*.css'
+      paths.styles.build + '**/*.css',
+      paths.styles.build + '**/*.css.map'
     ], cb);
   });
 

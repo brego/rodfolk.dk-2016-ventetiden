@@ -14,8 +14,7 @@
     <meta name="keywords"    content="">
     <meta name="author"      content="Kamil &ldquo;Brego&rdquo; Dzieliński">
     <meta name="copyright"   content="Kamil &ldquo;Brego&rdquo; Dzieliński">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato|Oswald|PT+Sans+Narrow:700|Permanent+Marker" rel="stylesheet" type="text/css">
+    <script src="scripts/modernizr.min.js"></script>
   </head>
   <body>
     <header>
@@ -33,13 +32,46 @@
     </header>
     <main>
       <section class="countdown">
-        <p class="countdown-here"></p>
+        <h2>Ventetiden er i gang!</h2>
+        <script type="text/template" id="countdown-wrap" class="countdown-wrap">
+          <div class="flip weeks">
+            <span class="number">{weeks}</span>
+            <span class="label">Uger</span>
+          </div>
+          <div class="flip days">
+            <span class="number">{days}</span>
+            <span class="label">Dage</span>
+          </div>
+          <div class="flip hours">
+            <span class="number">{hours}</span>
+            <span class="label">Timer</span>
+          </div>
+          <div class="flip minutes">
+            <span class="number">{minutes}</span>
+            <span class="label">Minutter</span>
+          </div>
+          <div class="flip seconds">
+            <span class="number">{seconds}</span>
+            <span class="label">Sekunder</span>
+          </div>
+        </script>
+        <p class="explanation">Næste ROD begynder den 19. marts 2016.</p>
       </section>
       <section class="what-is-rod">
         <p class="">
-          <a href="#" class="button">Hvad er ROD?</a>
+          <a href="#" id="what-is-rod-video" class="button">Hvad er ROD?</a>
         </p>
       </section>
+
+      <section class="explanation-video" id="explanation-video">
+        <div class="video-wrapper">
+          <div class="embed-container">
+            <iframe src="https://www.youtube.com/embed/iFRTdNAfSjU" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <a href="http://rodfolk.dk/2015/" target="_blank" class="button">Sidste års hjemmeside</a>
+        </div>
+      </section>
+
       <section class="a-team">
         <h2>A-TEAM</h2>
         <ul class="members">
@@ -112,8 +144,11 @@
           <a href="mailto:arbejdsgruppen indsaet-snabel-a-her denne-sides-adresse" class="button">Email hele A-TEAM</a>
         </p>
       </section>
-      <!-- <section class="section-one"></section> -->
     </main>
+    <footer class="site-footer">
+      <p>Kode &amp; Design af <a href="http://brego.dk/">Kamil ‘Brego’ Dzieliński</a></p>
+      <p>Indhold af <a href="mailto:arbejdsgruppen indsaet-snabel-a-her denne-sides-adresse">ROD2016 A-TEAM</a></p>
+    </footer>
     <script src="scripts/behavior.min.js"></script>
   </body>
 </html>
