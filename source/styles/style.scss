@@ -59,6 +59,24 @@ a {
   color: inherit;
 }
 
+h2 {
+  font-size: 2.4em;
+  font-family: $font-marker;
+  letter-spacing: .1em;
+  color: rgba(shade(#3f2841, 5%), .8);
+  padding-bottom: .2em;
+
+  @include respond-to(below-medium) {
+    font-size: 2em;
+  }
+
+  @include respond-to(handhelds) {
+    font-size: 1.8em;
+    letter-spacing: -.05em;
+  }
+}
+
+
 .button {
   display: inline-block;
   padding: .3em .7em;
@@ -138,20 +156,6 @@ main {
 }
 
 .countdown {
-
-  h2 {
-    font-size: 2.4em;
-    font-family: $font-marker;
-    letter-spacing: .1em;
-    color: rgba(shade(#3f2841, 5%), .8);
-    padding-bottom: .2em;
-
-    @include respond-to(below-medium) {
-      font-size: 1.8em;
-      letter-spacing: -.1em;
-    }
-  }
-
   .countdown-wrap {
     display: flex;
     justify-content: space-between;
@@ -196,19 +200,6 @@ main {
 }
 
 .a-team {
-  h2 {
-    font-size: 3em;
-    text-align: center;
-    font-family: $font-marker;
-    letter-spacing: .1em;
-    color: rgba(shade(#3f2841, 5%), .8);
-
-    @include respond-to(below-medium) {
-      font-size: 2.2em;
-      letter-spacing: 0;
-    }
-  }
-
   .members {
     display: flex;
     justify-content: space-between;
@@ -323,12 +314,14 @@ main {
 .explanation-video {
   transform: skewY(-10deg) scale(0);
   transform-origin: top center;
-  height: 0;
-  transition: all .24s $ease-in-out-circ;
+  max-height: 0;
+  overflow: hidden;
+  transition: all .44s $ease-in-out-circ;
 
   &.visible {
-    height: auto;
-    transform: skewY(-10deg) scale(1);
+    padding-top: 4em;
+    transform: skewY(0deg) scale(1);
+    max-height: 30em;
   }
 
   .button {
@@ -360,7 +353,6 @@ main {
   margin-top: 6em;
   padding: 2em;
   transform: skewY(-10deg);
-  transform-origin: center center;
   text-align: center;
 
   background-color: #583e2c;
@@ -424,7 +416,6 @@ main {
 
 %font-body {
   @extend %font-family-body;
-  // font-weight: 400;
   font-weight: 700;
 }
 
