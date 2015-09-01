@@ -428,13 +428,16 @@ main {
   font-family: $font-body;
   font-weight: 700;
 }
+
 %font-marker {
   font-family: $font-marker;
 }
+
 %skew-minus-ten {
   transform: skewY(-10deg);
   transform-origin: top center;
 }
+
 %transition-timing {
   transition-timing-function: $ease-in-out-circ;
 }
