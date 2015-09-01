@@ -26,7 +26,7 @@ body {
 
   line-height: 1.4;
   background-color: #007722;
-  color: $text-color;
+  color: #222222;
   min-height: 100%;
   height: 100%;
   width:  100%;
@@ -60,8 +60,9 @@ a {
 }
 
 h2 {
+  @extend %font-marker;
+
   font-size: 2.4em;
-  font-family: $font-marker;
   letter-spacing: .1em;
   color: rgba(shade(#3f2841, 5%), .8);
   padding-bottom: .2em;
@@ -76,8 +77,9 @@ h2 {
   }
 }
 
-
 .button {
+  @extend %transition-timing;
+
   display: inline-block;
   padding: .3em .7em;
   background-color: rgba(200, 20, 20, .65);
@@ -87,7 +89,7 @@ h2 {
   text-shadow: 1px 1px 0 #000;
   border-radius: .2em;
   font-size: 1.1em;
-  transition: all .2s $ease-in-out-circ;
+  transition: all .2s;
 
   @include respond-to(below-medium) {
     font-size: 1.05em;
@@ -101,13 +103,12 @@ h2 {
   }
 }
 
-
 .site-masthead {
   @extend %bg-pattern;
+  @extend %skew-minus-ten;
 
   padding: 3em 2em;
-  transform: skewY(-10deg);
-  transform-origin: center top;
+  // transform-origin: center top;
   background-color: shade(#3f2841, 10%);
 
   @include respond-to(handhelds) {
@@ -125,9 +126,10 @@ h2 {
   display: block;
 
   .site-subtitle {
+    @extend %font-marker;
+
     text-align: justify;
     text-transform: uppercase;
-    font-family: $font-marker;
     font-size: 38px;
   }
 }
@@ -143,10 +145,11 @@ main {
 .what-is-rod,
 .explanation-video,
 .a-team {
+  @extend %skew-minus-ten;
+
   padding-top: 2em;
   padding-left: 2em;
   padding-right: 2em;
-  transform: skewY(-10deg);
   text-align: center;
 
   @include respond-to(handhelds) {
@@ -186,15 +189,51 @@ main {
   }
 
   .explanation {
+    @extend %font-marker;
+
     font-size: 1.1em;
     text-align: center;
-    font-family: $font-marker;
     letter-spacing: .1em;
     color: rgba(shade(#3f2841, 5%), .8);
     padding-top: .2em;
 
     @include respond-to(below-medium) {
       letter-spacing: 0;
+    }
+  }
+}
+
+.explanation-video {
+  @extend %transition-timing;
+
+  transform: skewY(-10deg) scale(0);
+  max-height: 0;
+  overflow: hidden;
+  transition: all .44s;
+
+  &.visible {
+    padding-top: 4em;
+    transform: skewY(0deg) scale(1);
+    max-height: 30em;
+  }
+
+  .button {
+    margin-top: 1em;
+  }
+
+  .embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+
+    iframe, object, embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 }
@@ -207,54 +246,16 @@ main {
   }
 
   li {
+    @extend %transition-timing;
+
     box-sizing: border-box;
     display: block;
     width: 23%;
     height: 8em;
     padding-bottom: 1.6em;
-    transition: all .14s $ease-in-out-circ;
+    transition: all .14s;
     position: relative;
     text-align: left;
-
-    @include respond-to(below-medium) {
-      width: 31%;
-
-      .face {
-        opacity: .9;
-      }
-    }
-
-    @include respond-to(handhelds) {
-      width: 48%;
-    }
-
-    @include respond-to(wide-screens) {
-      padding-bottom: 1.4em;
-
-      .name, .info {
-        opacity: 0;
-        transform: translate(-4em, -2em) scale(.2);
-        transition: all .2s $ease-in-out-circ;
-      }
-
-      &:hover,
-      &:focus {
-        transform: scale(1.1);
-
-        .name, .info, .face {
-          opacity: 1;
-        }
-
-        .name {
-          transform: translate(0, 0) scale(1);
-        }
-
-        .info {
-          transform: translate(0, 0) scale(1);
-          transition-duration: .35s;
-        }
-      }
-    };
 
     .name {
       padding: 0 .2em;
@@ -279,6 +280,64 @@ main {
       background-color: rgba(white, .75);
       display: inline-block;
     }
+
+    @include respond-to(wide-screens) {
+      padding-bottom: 1.4em;
+
+      .name, .info {
+        @extend %transition-timing;
+
+        opacity: 0;
+        transform: translate(-4em, -2em) scale(.2);
+        transition: all .2s;
+      }
+
+      &:hover,
+      &:focus {
+        transform: scale(1.1);
+
+        .name, .info, .face {
+          opacity: 1;
+        }
+
+        .name {
+          transform: translate(0, 0) scale(1);
+        }
+
+        .info {
+          transform: translate(0, 0) scale(1);
+          transition-duration: .35s;
+        }
+      }
+    };
+
+    @include respond-to(below-medium) {
+      width: 31%;
+
+      .face {
+        opacity: .9;
+      }
+
+      .name {
+        bottom: 2.1em;
+      }
+
+      .info {
+        bottom: .6em;
+      }
+
+      .name, .info {
+        font-size: .75em;
+      }
+    };
+
+    @include respond-to(handhelds) {
+      width: 48%;
+
+      .name, .info {
+        font-size: .82em;
+      }
+    };
   }
 
   .face {
@@ -311,53 +370,17 @@ main {
   }
 }
 
-.explanation-video {
-  transform: skewY(-10deg) scale(0);
-  transform-origin: top center;
-  max-height: 0;
-  overflow: hidden;
-  transition: all .44s $ease-in-out-circ;
-
-  &.visible {
-    padding-top: 4em;
-    transform: skewY(0deg) scale(1);
-    max-height: 30em;
-  }
-
-  .button {
-    margin-top: 1em;
-  }
-
-  .embed-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-  }
-
-  .embed-container iframe,
-  .embed-container object,
-  .embed-container embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
-
 .site-footer {
   @extend %bg-pattern;
+  @extend %skew-minus-ten;
 
   margin-top: 6em;
   padding: 2em;
-  transform: skewY(-10deg);
   text-align: center;
 
   background-color: #583e2c;
 
-  color: rgba(black, .7);
+  color: rgba(222, 227, 237, .65);
   font-size: .9em;
 
   @include respond-to(handhelds) {
@@ -367,13 +390,28 @@ main {
     font-size: .75em;
   }
 
+  p:first-child::after {
+    content: '';
+    display: block;
+    border-bottom: .15em solid rgba(black, .35);
+    width: 20em;
+    margin: auto;
+    position: absolute;
+    top: 3.9em;
+    right: 0;
+    left: 0;
+    box-shadow: 1px 1px 0 rgba(white, .1);
+  }
+
   a {
-    color: rgba(50, 10, 10, .85);
-    transition: all .25s $ease-in-out-circ;
+    @extend %transition-timing;
+
+    color: rgba(white, .65);
+    transition: all .25s;
     border-bottom: 2px solid transparent;
 
     &:hover {
-      border-bottom: 2px solid rgba(50, 10, 10, .85);
+      color: #f5f5f5;
     }
   }
 }
@@ -382,32 +420,23 @@ main {
   background-image: imgurl('cardboard.png');
 }
 
-
 %clear {
   @include clearfix;
 }
 
-%font-family-headline {
-  font-family: "Ruda", "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", Verdana, Geneva, sans-serif;
-}
-
-%font-family-body {
-  font-family: "Lato", "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", Verdana, Geneva, sans-serif;
-}
-
-%font-headline {
-  @extend %font-family-headline;
-  font-weight: 900;
-}
-
-%font-body-bold {
-  @extend %font-family-body;
-  font-weight: 700;
-}
-
 %font-body {
-  @extend %font-family-body;
+  font-family: $font-body;
   font-weight: 700;
+}
+%font-marker {
+  font-family: $font-marker;
+}
+%skew-minus-ten {
+  transform: skewY(-10deg);
+  transform-origin: top center;
+}
+%transition-timing {
+  transition-timing-function: $ease-in-out-circ;
 }
 
 @import 'print';

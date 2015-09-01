@@ -33,7 +33,6 @@
 		content: " (" attr(title) ")";
 	}
 
-	.ir a:after,
 	a[href^="tel:"]:after,
 	a[href^="javascript:"]:after {
 		content: "";
