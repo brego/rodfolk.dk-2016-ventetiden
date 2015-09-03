@@ -28,15 +28,10 @@
     }
   };
 
-  // var spriteConfig = {
-  //   imgName: 'sprite.png',
-  //   cssName: '_sprite.scss',
-  //   imgPath: paths.images.dest + 'sprite.png'
-  // };
-
   var gulp  = require('gulp');
   var es    = require('event-stream');
   var gutil = require('gulp-util');
+  var conf  = require('./.conf.json');
   var $     = require('gulp-load-plugins')({
     pattern: [
       'gulp-*', 'gulp.*', 'del', 'mkdirp'
@@ -172,6 +167,11 @@
   gulp.task('build:html', ['clean:html'], function(cb) {
     gulp.src(paths.html.source + '**/*.html')
       .pipe($.plumber())
+      .pipe($.replace(/{{([a-z\-]+)}}/gim, function(match, varName) {
+        if (conf.replace.hasOwnProperty(varName)) {
+          return conf.replace[varName];
+        }
+      }))
       .pipe(gulp.dest(paths.html.build))
       .pipe($.browserSync.stream());
     cb()
