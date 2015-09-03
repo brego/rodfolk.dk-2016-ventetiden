@@ -72,7 +72,7 @@ h2 {
   }
 
   @include respond-to(handhelds) {
-    font-size: 1.8em;
+    font-size: 1.7em;
     letter-spacing: -.05em;
   }
 }
@@ -186,14 +186,24 @@ main {
     padding: .2em 0;
 
     .number {
-      font-size: 1.2em;
+      font-size: 1.8em;
       display: block;
     }
 
     .label {
-      font-size: .5em;
+      font-size: .8em;
       text-transform: uppercase;
     }
+
+    @include respond-to(handhelds) {
+      .number {
+        font-size: 1.2em;
+      }
+
+      .label {
+        font-size: .5em;
+      }
+    };
   }
 
   .explanation {
