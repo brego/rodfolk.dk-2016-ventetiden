@@ -366,13 +366,13 @@ main {
   }
 
   .adam    { background-position: 0 0; }
-  .hans    { background-position: 0 ((100% / (8-1)) * 1); }
-  .jonas   { background-position: 0 ((100% / (8-1)) * 2); }
-  .julian  { background-position: 0 ((100% / (8-1)) * 3); }
-  .michael { background-position: 0 ((100% / (8-1)) * 4); }
-  .morten  { background-position: 0 ((100% / (8-1)) * 5); }
-  .sofie   { background-position: 0 ((100% / (8-1)) * 6); }
-  .villads { background-position: 0 ((100% / (8-1)) * 7); }
+  .hans    { background-position: 0 ((100% / (8 - 1)) * 1); }
+  .jonas   { background-position: 0 ((100% / (8 - 1)) * 2); }
+  .julian  { background-position: 0 ((100% / (8 - 1)) * 3); }
+  .michael { background-position: 0 ((100% / (8 - 1)) * 4); }
+  .morten  { background-position: 0 ((100% / (8 - 1)) * 5); }
+  .sofie   { background-position: 0 ((100% / (8 - 1)) * 6); }
+  .villads { background-position: 0 ((100% / (8 - 1)) * 7); }
 
   .contact-them-all {
     text-align: center;
