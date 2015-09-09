@@ -86,7 +86,7 @@
    */
 
   gulp.task('watch', [
-    'watch:scripts', 'watch:styles', 'watch:html', 'watch:assets'
+    'watch:scripts', 'watch:styles', 'watch:html', 'watch:images'
   ]);
 
   gulp.task('watch:scripts', ['build:scripts'], function(cb) {
