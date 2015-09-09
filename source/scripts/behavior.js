@@ -207,7 +207,7 @@
     }, 2000);
 
     // Load Google Analytics
-    // load_ga('UA-7594481-5');
+    load_ga('UA-7594481-5');
 
     fix_members_flex();
 
