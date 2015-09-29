@@ -5,6 +5,22 @@
   "version": "0.1.0",
   "license": "MIT",
   "repository": "https://github.com/brego/rodfolk.dk-2016-ventetiden",
+  "paths" : {
+    "source": {
+      "base":    "source/",
+      "html":    "source/",
+      "styles":  "source/styles/",
+      "scripts": "source/scripts/",
+      "images":  "source/images/"
+    },
+    "build": {
+      "base":    "build/",
+      "html":    "build/",
+      "styles":  "build/styles/",
+      "scripts": "build/scripts/",
+      "images":  "build/images/"
+    }
+  },
   "devDependencies": {
     "browser-sync": "^2.8.2",
     "del": "^1.2.0",

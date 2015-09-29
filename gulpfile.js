@@ -1,32 +1,7 @@
 (function() {
   'use strict';
 
-  var basePaths = {
-    source:   'source/',
-    build: 'build/'
-  };
-
-  var paths = {
-    html: {
-      source: basePaths.source,
-      build: basePaths.build
-    },
-    images: {
-      source: basePaths.source + 'images/',
-      build: basePaths.build + 'images/'
-    },
-    scripts: {
-      source: basePaths.source + 'scripts/',
-      build: basePaths.build + 'scripts/'
-    },
-    styles: {
-      source: basePaths.source + 'styles/',
-      build: basePaths.build + 'styles/'
-    },
-    sprite: {
-      source: basePaths.source + 'sprite/*'
-    }
-  };
+  var paths = require('./package.json').paths;
 
   var gulp  = require('gulp');
   var es    = require('event-stream');
@@ -62,22 +37,21 @@
   gulp.task('serve', ['build'], function() {
     $.browserSync.init({
       server: {
-        baseDir: 'build/',
+        baseDir: paths.build.base,
       },
       port: 1337,
       open: true,
-      // open: false,
       browser: 'default',
       notify: false
     });
 
-    gulp.watch("source/styles/**/*.scss", ['build:styles'])
+    gulp.watch(paths.source.styles + "**/*.scss", ['build:styles'])
       .on('change', changeEvent);
-    gulp.watch("source/scripts/**/*.js", ['build:scripts'])
+    gulp.watch(paths.source.scripts + "**/*.js", ['build:scripts'])
       .on('change', changeEvent);
-    gulp.watch("source/**/*.(jpg|png)", ['build:assets'])
+    gulp.watch(paths.source.images + "**/*.(jpg|png)", ['build:assets'])
       .on('change', changeEvent);
-    gulp.watch('source/**/*.html', ['build:html'])
+    gulp.watch(paths.source.html + '**/*.html', ['build:html'])
       .on('change', changeEvent);
   });
 
@@ -90,7 +64,7 @@
   ]);
 
   gulp.task('watch:scripts', ['build:scripts'], function(cb) {
-    var watcher = gulp.watch(paths.scripts.source + '**/*.js', [
+    var watcher = gulp.watch(paths.source.scripts + '**/*.js', [
       'build:scripts'
     ]);
     watcher.on('change', changeEvent);
@@ -98,7 +72,7 @@
   });
 
   gulp.task('watch:styles', ['build:styles'], function(cb) {
-    var watcher = gulp.watch(paths.styles.source + '**/*.scss', [
+    var watcher = gulp.watch(paths.source.styles + '**/*.scss', [
       'build:styles'
     ]);
     watcher.on('change', changeEvent);
@@ -106,7 +80,7 @@
   });
 
   gulp.task('watch:html', ['build:html'], function(cb) {
-    var watcher = gulp.watch(paths.html.source + '**/*', [
+    var watcher = gulp.watch(paths.source.html + '**/*', [
       'build:html'
     ]);
     watcher.on('change', changeEvent);
@@ -114,7 +88,7 @@
   });
 
   gulp.task('watch:images', ['build:images'], function(cb) {
-    var watcher = gulp.watch(paths.images.source + '**/*', [
+    var watcher = gulp.watch(paths.source.images + '**/*', [
       'build:images'
     ]);
     watcher.on('change', changeEvent);
@@ -130,24 +104,24 @@
   ]);
 
   gulp.task('build:scripts', ['clean:scripts', 'lint:scripts'], function(cb) {
-    $.mkdirp(paths.scripts.build);
-    gulp.src(paths.scripts.source + '**/*.js')
+    $.mkdirp(paths.build.scripts);
+    gulp.src(paths.source.scripts + '**/*.js')
       .pipe($.plumber())
       .pipe($.sourcemaps.init())
-      .pipe(gulp.dest(paths.scripts.build))
+      .pipe(gulp.dest(paths.build.scripts))
       .pipe($.uglify({
         preserveComments: 'some' // Should be 'license', but that's dead
       }))
       .pipe($.rename({suffix: '.min'}))
       .pipe($.sourcemaps.write('.'))
-      .pipe(gulp.dest(paths.scripts.build))
+      .pipe(gulp.dest(paths.build.scripts))
       .pipe($.browserSync.stream());
     cb();
   });
 
   gulp.task('build:styles', ['clean:styles', 'lint:styles'], function(cb) {
-    $.mkdirp(paths.styles.build);
-    gulp.src(paths.styles.source + '**/*.scss')
+    $.mkdirp(paths.build.styles);
+    gulp.src(paths.source.styles + '**/*.scss')
       .pipe($.plumber())
       .pipe($.sourcemaps.init())
       .pipe($.sass({
@@ -155,33 +129,33 @@
         includePaths: require('node-bourbon').includePaths
       }))
       .pipe($.autoprefixer())
-      .pipe(gulp.dest(paths.styles.build))
+      .pipe(gulp.dest(paths.build.styles))
       .pipe($.minifyCss())
       .pipe($.rename({suffix: '.min'}))
       .pipe($.sourcemaps.write('.'))
-      .pipe(gulp.dest(paths.styles.build))
+      .pipe(gulp.dest(paths.build.styles))
       .pipe($.browserSync.stream());
     cb();
   });
 
   gulp.task('build:html', ['clean:html'], function(cb) {
-    gulp.src(paths.html.source + '**/*.html')
+    gulp.src(paths.source.html + '**/*.html')
       .pipe($.plumber())
       .pipe($.replace(/{{([a-z\-]+)}}/gim, function(match, varName) {
         if (conf.replace.hasOwnProperty(varName)) {
           return conf.replace[varName];
         }
       }))
-      .pipe(gulp.dest(paths.html.build))
+      .pipe(gulp.dest(paths.build.html))
       .pipe($.browserSync.stream());
     cb()
   });
 
   gulp.task('build:images', ['clean:images'], function() {
-    $.mkdirp(paths.images.build);
-    gulp.src(paths.images.source + '**/*')
+    $.mkdirp(paths.build.images);
+    gulp.src(paths.source.images + '**/*')
       .pipe($.plumber())
-      .pipe(gulp.dest(paths.images.build))
+      .pipe(gulp.dest(paths.build.images))
       .pipe($.browserSync.stream());
   });
 
@@ -190,7 +164,7 @@
    */
 
   gulp.task('lint:scripts', function(cb) {
-    gulp.src([paths.scripts.source + '**/*.js', '!**/external/*.js'])
+    gulp.src([paths.source.scripts + '**/*.js', '!**/external/*.js'])
       .pipe($.plumber())
       .pipe($.jshint())
       .pipe($.jshint.reporter('jshint-stylish'))
@@ -198,7 +172,7 @@
   });
 
   gulp.task('lint:styles', function(cb) {
-    gulp.src(paths.styles.source + '**/*.scss')
+    gulp.src(paths.source.styles + '**/*.scss')
       .pipe($.plumber())
       .pipe($.sassLint({
         config: '.scss-lint.yml',
@@ -212,34 +186,34 @@
    */
 
   gulp.task('clean', function(cb) {
-    $.del('build/');
-    $.mkdirp('build/');
+    $.del(paths.build.base);
+    $.mkdirp(paths.build.base);
     cb();
   });
 
   gulp.task('clean:scripts', function(cb) {
     $.del([
-      paths.scripts.build + '**/*.js',
-      paths.scripts.build + '**/*.js.map'
+      paths.build.scripts + '**/*.js',
+      paths.build.scripts + '**/*.js.map'
     ], cb);
   });
 
   gulp.task('clean:styles', function(cb) {
     $.del([
-      paths.styles.build + '**/*.css',
-      paths.styles.build + '**/*.css.map'
+      paths.build.styles + '**/*.css',
+      paths.build.styles + '**/*.css.map'
     ], cb);
   });
 
   gulp.task('clean:images', function(cb) {
     $.del([
-      paths.images.build + '*'
+      paths.build.images + '*'
     ], cb);
   });
 
   gulp.task('clean:html', function(cb) {
     $.del([
-      paths.html.build + '**/*.html'
+      paths.build.html + '**/*.html'
     ], cb);
   });
 
